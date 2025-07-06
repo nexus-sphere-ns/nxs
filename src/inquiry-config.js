@@ -22,13 +22,13 @@ const InquirySchema = new mongoose.Schema(
     mobile: {
       type: String,
       required: true,
-      validate: {
+      /*validate: {
         validator: function (v) {
           // Accepts: +9715XXXXXXXX or 05XXXXXXXX
           return /^(\+9715\d{8}|05\d{8})$/.test(v);
         },
         message: (props) => `${props.value} is not a valid UAE mobile number!`,
-      },
+      },*/
     },
     email: {
       type: String,
