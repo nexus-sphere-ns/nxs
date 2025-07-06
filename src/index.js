@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 const path = require("path");
 const user_collection = require("./user-config");
@@ -108,7 +110,7 @@ app.post("/submitInquiry", async (req, res) => {
 });
 
 // Define Port for Application
-const port = 5000;
+const port = process.env.PORT | 5000;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
