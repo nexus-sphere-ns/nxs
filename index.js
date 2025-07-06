@@ -2,8 +2,8 @@ require('dotenv').config();
 
 const express = require("express");
 const path = require("path");
-const user_collection = require("./user-config");
-const inquiry_collection = require("./inquiry-config");
+const user_collection = require("./src/user-config");
+const inquiry_collection = require("./src/inquiry-config");
 
 const bcrypt = require("bcrypt");
 
