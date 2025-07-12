@@ -1,13 +1,17 @@
-require('dotenv').config();
+require("dotenv").config();
 
 const express = require("express");
+const expressLayouts = require("express-ejs-layouts");
 const path = require("path");
 const user_collection = require("./src/user-config");
 const inquiry_collection = require("./src/inquiry-config");
 
 const bcrypt = require("bcrypt");
+const { clear } = require("console");
 
 const app = express();
+app.use(expressLayouts);
+app.set("layout", "./layouts/layout-1.ejs");
 // convert data into json format
 app.use(express.json());
 // Static file
@@ -24,15 +28,25 @@ app.get("/home", (req, res) => {
   res.render("home");
 });
 app.get("/catalog-2", (req, res) => {
-  res.render("catalog-2");
+  res.render("catalog-2", { layout: "./layouts/layout-2.ejs" });
 });
 app.get("/catalog-3", (req, res) => {
-  res.render("catalog-3");
+  res.render("catalog-3", { layout: "./layouts/layout-2.ejs" });
+});
+app.get("/sent-already", (req, res) => {
+  res.render("sent-already", { layout: "./layouts/layout-3.ejs" });
+});
+app.get("/sent-successfully", (req, res) => {
+  res.render("sent-successfully", { layout: "./layouts/layout-3.ejs" });
 });
 
 const now = new Date();
 const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-const endOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+const endOfToday = new Date(
+  now.getFullYear(),
+  now.getMonth(),
+  now.getDate() + 1
+);
 
 // Register User
 app.post("/signup", async (req, res) => {
@@ -91,21 +105,22 @@ app.post("/submitInquiry", async (req, res) => {
   };
 
   // Check if the username already exists in the database
-  const existing = await inquiry_collection.findOne({ mobile: data.mobile , createdAt:
-    {
+  const existing = await inquiry_collection.findOne({
+    mobile: data.mobile,
+    createdAt: {
       $gte: startOfToday,
-      $lt: endOfToday
-    }
+      $lt: endOfToday,
+    },
   });
 
   if (existing) {
     console.log("sent already!");
     /*res.send("Already sent!");*/
-    res.render("sent-already");
+    res.render("sent-already", { layout: "./layouts/layout-3.ejs" });
   } else {
     const inquiryData = await inquiry_collection.insertMany(data);
     console.log(inquiryData);
-    res.render("sent-successfully");
+    res.render("sent-successfully", { layout: "./layouts/layout-3.ejs" });
   }
 });
 
